@@ -29,6 +29,20 @@ public class PlayerControl : MonoBehaviour
         inputActionPlayer = new PlayerActions();
     }
 
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
+        anim.SetFloat("Speed", rb.linearVelocity.magnitude / maxSpeed); //con esto le estamos cambiando el valor de animacion que determinamos como move y con su float de
+                                                                        //nombre Speed. El valor se da diciendo, que si esta quieto entonces cero / algo = cero
+                                                                        //y si esta a la maxima velocidad, al dividirlo por si misma da 1. con eso tenemos todo el rango
+                                                                        //y se ejecuta la animacion correspondiente. 
+                                            
+    }
+
     private void FixedUpdate()
     {
         rb.AddForce(Physics.gravity * (multiplicadorGravedad -1), ForceMode.Acceleration);
@@ -67,16 +81,7 @@ public class PlayerControl : MonoBehaviour
         LookAt(); //orienta al jugador en la direccion que se esta moviendo... 
     }   
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    
 
     private void LookAt()
     {
