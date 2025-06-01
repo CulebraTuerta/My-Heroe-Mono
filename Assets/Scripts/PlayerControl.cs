@@ -40,7 +40,7 @@ public class PlayerControl : MonoBehaviour
                                                                         //nombre Speed. El valor se da diciendo, que si esta quieto entonces cero / algo = cero
                                                                         //y si esta a la maxima velocidad, al dividirlo por si misma da 1. con eso tenemos todo el rango
                                                                         //y se ejecuta la animacion correspondiente. 
-                                            
+                                                                        //se tiene que poner en el update, porque tiene que ejecutar tambien el idle (quieto si speed = cero)
     }
 
     private void FixedUpdate()
@@ -114,18 +114,25 @@ public class PlayerControl : MonoBehaviour
         return forward.normalized; //y con esto el metodo no retorna el vector en esa direccion normalizado.
     }
 
-    private void OnEnable() //esto habilita la funcionabilidad de los imputs
+    private void OnEnable() //esto habilita la funcionabilidad de los imputs, osea como controlamos el juego (teclado o joystick)
     {
-        inputActionPlayer.PlayerMove.Jump.started += OnPlayerJump;
+        inputActionPlayer.PlayerMove.Jump.started += OnPlayerJump; //con esto inicializamos el jump desde el input
+        inputActionPlayer.PlayerMove.AttackSword.started += OnAttackPlayer; //con esto inicializamos el attack desde el input, aun no se porque se le pone el +=...
         move = inputActionPlayer.PlayerMove.Move; //basicamente las acciones de movimiento las metemos dentro de la variable "move"
         inputActionPlayer.PlayerMove.Enable();// y que luego las habilitamos
     }
-    private void OnDisable() //esto deshabilita la funcionabilidad de los imputs //basicamente 
+    private void OnDisable() //esto deshabilita la funcionabilidad de los imputs //basicamente es lo contrario al anterior
     {
         inputActionPlayer.PlayerMove.Jump.started -= OnPlayerJump;
         inputActionPlayer.PlayerMove.Disable();// aqui las desabilitamos
 
     }
+    private void OnAttackPlayer(InputAction.CallbackContext context) //cuando se active el onattackplayer viene a ejecutar esto.
+    {
+        audio.PlayOneShot(swordHit); //hace el sonido 
+        anim.SetTrigger("Attack"); //va a la animacion y con el trigger de attack realiza la animacion seteada con ese trigger.
+    }
+
     private void OnPlayerJump(InputAction.CallbackContext context) //contexto contiene toda la info relacionada con este metodo... 
     {
         anim.SetTrigger("Jump"); //esto lo tenemos que definir en otra parte (se hizo casi al principio... el profe partio asi.
