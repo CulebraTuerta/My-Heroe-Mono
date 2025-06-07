@@ -63,15 +63,27 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
         if (!isDead)
         {
             isDead = true;
             animator.SetTrigger("Dead");
-            rangeCollider.enabled = false; //con esto desactivamos el collider
-            navAgent.isStopped = true; //desactivamos el navagent.
+            //navAgent.isStopped = true; //desactivamos el navagent.
+            navAgent.enabled = false; //esta es mejor opcion para desactivar el navagent
             audioSource.enabled = false; //desactivamos el sonido
+            //rangeCollider.enabled = false; //con esto desactivamos el collider //es mejor la siguiente opcion asi cerramos todos los colliders...
+
+            foreach (Collider collider in GetComponentsInChildren<Collider>(true))
+            {
+                collider.enabled = false;
+            }
+
+            //Collider childCollider = GetComponentInChildren<Collider>();
+            //if (childCollider != null)
+            //{
+            //    childCollider.enabled = false;
+            //}
         }
     }
 }
